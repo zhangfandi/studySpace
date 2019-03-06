@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					   xmlns:s="library://ns.adobe.com/flex/spark" 
+					   xmlns:mx="library://ns.adobe.com/flex/mx"
+					   >
+	<s:layout>
+		<s:BasicLayout/>
+	</s:layout>
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayList;
+			[Bindable]
+			private var list : ArrayList = new ArrayList(
+				['选项1','选项2','选项3','选项4','选项5','选项6','选项7','选项8']
+			);
+			
+			[Bindable]
+			private var v:Vector.<int> = new <int>[1,2,3];
+			
+			private function itemMatchingFunction (comboBox:ComboBox, inputText:String):Vector.<int>{
+				if(inputText == 'a')
+					return new <int>[5];
+				else
+					return new <int>[];
+			}
+
+
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<s:List x="10" y="10" width="127"
+			allowMultipleSelection="true"
+			selectedIndices="{v}"
+			dataProvider="{list}" height="150"></s:List>
+	<s:ComboBox x="157" y="50"
+				focusIn="{IME.enabled=true;}"
+				
+				maxChars="10"
+				restrict="abc"
+				openOnInput="true"
+				
+				itemMatchingFunction="itemMatchingFunction"
+				
+				selectedIndex="2" dataProvider="{list}"/>
+	<s:DropDownList x="158" y="10" selectedIndex="2" dataProvider="{list}" ></s:DropDownList>
+</s:WindowedApplication>

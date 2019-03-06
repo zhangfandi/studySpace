@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					   xmlns:s="library://ns.adobe.com/flex/spark" 
+					   xmlns:mx="library://ns.adobe.com/flex/mx">
+	<s:layout>
+		<s:BasicLayout/>
+	</s:layout>
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<mx:Accordion width="200" bottom="10" left="10" top="10">
+		<s:NavigatorContent label="我的好友" width="100%" height="100%">
+		</s:NavigatorContent>
+		<s:NavigatorContent label="陌生人" width="100%" height="100%">
+			<s:CheckBox x="85" y="113" label="CheckBox"/>
+		</s:NavigatorContent>
+		<s:NavigatorContent label="黑名单" width="100%" height="100%">
+			<s:layout>
+				<s:VerticalLayout/>
+			</s:layout>
+			<s:Button label="按钮"/>
+			<s:Button label="按钮"/>
+		</s:NavigatorContent>
+	</mx:Accordion>
+</s:WindowedApplication>

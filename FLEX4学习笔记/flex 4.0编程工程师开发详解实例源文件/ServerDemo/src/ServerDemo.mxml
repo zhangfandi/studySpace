@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx"
+			   minWidth="955" minHeight="600"
+			   creationComplete="application1_creationCompleteHandler(event)"
+			   >
+	<fx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			import mx.events.FlexEvent;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			import spark.components.CheckBox;
+
+			protected function http_faultHandler(event:FaultEvent):void
+			{
+				// TODO Auto-generated method stub
+				trace("错误信息:",event.message,"-------");
+				
+				Alert.show("数据请求过程中，发生错误","通信错误");
+			}
+
+
+			protected function http_resultHandler(event:ResultEvent):void
+			{
+				// TODO Auto-generated method stub
+				trace(event.result);
+				grid.dataProvider = event.result.person;
+			}
+
+
+			protected function application1_creationCompleteHandler(event:FlexEvent):void
+			{
+				// TODO Auto-generated method stub
+				http.send();
+			}
+			
+			private function labelFunction(item:Object, column:DataGridColumn):String{
+				return item.gender == 0 ? 'woman':'man';
+			}
+
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+		<s:HTTPService id="http"
+					   url="/flex.php"
+					   method="POST"
+					   resultFormat="e4x"
+					   fault="http_faultHandler(event)"
+					   result="http_resultHandler(event)"
+					   />
+	</fx:Declarations>
+	<mx:DataGrid x="29" y="51" width="399" height="211" id="grid" editable="true">
+		<mx:columns>
+			<mx:DataGridColumn headerText="Name" dataField="name"/>
+			<mx:DataGridColumn headerText="Age" dataField="age"/>
+			<mx:DataGridColumn headerText="Gender" labelFunction="labelFunction"/>
+			<mx:DataGridColumn headerText="Editor" textAlign="center"
+							   labelFunction="labelFunction"
+							   dataField="gender"
+							   editorDataField="selectedIndex"
+							   >
+				<mx:itemEditor>
+					<fx:Component>
+						<mx:ComboBox selectedIndex="{data.gender}">
+							<s:ArrayList>
+								<fx:String>woman</fx:String>
+								<fx:String>man</fx:String>
+							</s:ArrayList>
+						</mx:ComboBox>
+					</fx:Component>
+				</mx:itemEditor>
+			</mx:DataGridColumn>
+			<mx:DataGridColumn itemRenderer="MyRenderer" editable="false" />
+		</mx:columns>
+	</mx:DataGrid>
+</s:Application>

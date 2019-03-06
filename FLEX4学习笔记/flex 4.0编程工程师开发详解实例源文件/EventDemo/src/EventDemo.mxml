@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					   xmlns:s="library://ns.adobe.com/flex/spark" 
+					   xmlns:mx="library://ns.adobe.com/flex/mx"
+					   creationComplete="callOver();"
+					   >
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import event.CallOverEvent;
+			import event.Student;
+			import event.Teacher;
+			private var teacher:Teacher = new Teacher();
+			private var student1:Student = new Student();
+			private var student2:Student = new Student();
+			
+			public function callOver():void{
+				student1.name = '张三';
+				student2.name = '李四';
+				
+				teacher.addEventListener(CallOverEvent.CALL_NAME_EVENT,
+					student1.callOverEventHandler);
+				teacher.addEventListener(CallOverEvent.CALL_NAME_EVENT,
+					student2.callOverEventHandler);
+				
+				teacher.callOver('张三');
+				teacher.callOver('小明');
+				teacher.callOver('李四');
+				teacher.callOver('王五');
+				
+				
+				container1.addEventListener(MouseEvent.MOUSE_OVER,changeBorder, true);
+				container1.addEventListener(MouseEvent.MOUSE_OUT,resetBorder);
+				
+				container2.addEventListener(MouseEvent.MOUSE_OVER,changeBorder);
+				container2.addEventListener(MouseEvent.MOUSE_OUT,resetBorder);
+				
+				container3.addEventListener(MouseEvent.MOUSE_OVER,stopBubbles);
+				container3.addEventListener(MouseEvent.MOUSE_OVER,changeBorder);
+				container3.addEventListener(MouseEvent.MOUSE_OUT,resetBorder);
+			}
+			
+			public function changeBorder(e:MouseEvent):void{
+				e.currentTarget.setStyle('borderColor', 0xff0000);
+				trace(e.target);
+			}
+			
+			public function resetBorder(e:MouseEvent):void{
+				e.currentTarget.setStyle('borderColor', 0x000000);
+			}
+			
+			public function stopBubbles(e:MouseEvent):void{
+				//e.stopPropagation();
+				e.stopImmediatePropagation();
+			}
+		]]>
+	</fx:Script>
+	<s:BorderContainer id="container1" x="10" y="10" width="385" height="292">
+		<s:BorderContainer id="container2" x="10" y="10" width="353" height="271">
+			<s:BorderContainer id="container3" x="10" y="10" width="321" height="249">
+				<s:Button x="10" y="22" label="按钮"/>
+				<s:Button x="10" y="74" label="按钮"/>
+			</s:BorderContainer>
+		</s:BorderContainer>
+	</s:BorderContainer>
+</s:WindowedApplication>

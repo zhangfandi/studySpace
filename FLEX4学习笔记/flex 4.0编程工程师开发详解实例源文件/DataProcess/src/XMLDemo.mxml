@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="955" minHeight="600"
+			   creationComplete="application1_creationCompleteHandler(event)">
+	<s:layout>
+		<s:BasicLayout/>
+	</s:layout>
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			private var xml:XML = <html>
+										<head>
+											<meta charset="utf-8"/>
+											<title>新标签</title>
+											<link rel="stylesheet" href="css/style.css"/>
+										</head>
+										<body>
+											<div id="idName" class="className1">1htmlBody</div>
+											<div id="idName" class="className1">Untitled</div>
+											<div id="idName" class="className2">attributes</div>
+											<span id="idName" class="className">
+												<div id="idName" class="className3">descendants</div>
+												<div id="idName" class="className3">child</div>
+												<div id="idName" class="className2">12text</div>
+											</span>
+										</body>
+									</html>;
+			private var xmlStr:String='<html><head><meta charset="utf-8"/>' +
+										'<title>StringXML</title></head></html>';
+
+			protected function application1_creationCompleteHandler(event:FlexEvent):void
+			{
+				var xmlFromString:XML = new XML(xmlStr);
+				
+				/*
+				trace(xml.head);//中间节点，使用完整的XML节点值
+				trace(xml.head.title);//叶子节点，直接使用文本节点作为当前节点的值
+				trace(xml.head.title.toXMLString());
+				*/
+				
+				//修改节点值
+				xml.head.title = '新页面';
+				
+				//增加节点
+				//xml.head.script = new XML();
+				xml.head.script = 'var a,b,c;';
+				
+				//修改属性值
+				xml.head.link.@href='css/css.css';
+				
+				//增加属性值
+				xml.head.link.@type='text/text';
+				
+				//删除节点
+				delete xml.head.meta;
+				
+				//删除属性
+				delete xml.head.link.@rel;
+				
+				//trace(xml.head);
+				
+				//trace(xml..div.(@class =='className2'));//属性名与关键字冲突，不能直接这样写
+				//trace(xml..div.(attribute("class") =='className2')); //比较搜索
+				
+				//trace(xml..div.(*.match(/^\d.*/))); //正则搜索
+				
+				xml..div.(search(*));
+				
+			}
+
+			public function search(value:*):Boolean{
+				trace(value);
+				return true;
+			}
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+</s:Application>

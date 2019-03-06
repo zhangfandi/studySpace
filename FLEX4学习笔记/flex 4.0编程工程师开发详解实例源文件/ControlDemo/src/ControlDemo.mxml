@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					   xmlns:s="library://ns.adobe.com/flex/spark" 
+					   xmlns:mx="library://ns.adobe.com/flex/mx"
+					   creationComplete="windowedapplication1_creationCompleteHandler(event)"
+					   >
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+
+			protected function windowedapplication1_creationCompleteHandler(event:FlexEvent):void
+			{
+				// TODO Auto-generated method stub
+				text.text = "多行文本\r多行文本\n多行文本\r\n多行文本";
+			}
+
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<s:Label x="38" y="29"
+			 maxDisplayedLines="-1"
+			 text="单行文本" fontFamily="中易宋体" textDecoration="underline" color="#FF0000" backgroundColor="#4200FF" backgroundAlpha="0.46" paddingLeft="5" paddingRight="5" paddingTop="5" paddingBottom="5" width="50" height="20"/>
+	<s:Label id="text" x="38" y="157" text="" maxDisplayedLines="2"/>
+</s:WindowedApplication>

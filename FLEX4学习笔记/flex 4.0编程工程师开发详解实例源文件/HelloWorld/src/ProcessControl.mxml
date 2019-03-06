@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					   xmlns:s="library://ns.adobe.com/flex/spark" 
+					   xmlns:mx="library://ns.adobe.com/flex/mx"
+					   creationComplete="windowedapplication1_creationCompleteHandler(event)"
+					   >
+	<s:layout>
+		<s:BasicLayout/>
+	</s:layout>
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+
+			protected function windowedapplication1_creationCompleteHandler(event:FlexEvent):void
+			{
+				// TODO Auto-generated method stub
+				/*
+				var o1 : Object = {};
+				var o2 : Object = {};
+				var i : int = 100;
+				var a : Array;
+				
+				o1.age = 10;
+				o2.age = 10;
+				o1.name = '张三';
+				o2.name = '张三';
+				
+				a = [o1, o2, i];
+				
+				switch(a[2]){
+					case o1:
+						trace('表达式是o1');
+						break;
+					case o2:
+						trace('表达式是o2');
+						break;
+					
+					case 100:
+						trace('表达式是数值10');
+						break;
+				}
+				*/
+				
+				/*
+				var person : Object = {};
+				person.age = 20;
+				person.gender = '男'
+				person.name = '张三';
+				
+				for(var key : Object in person){
+					trace(key);
+				}
+				*/
+				/*
+				var a : Array = [1,2,3,4,5,6,7,8,9,0];
+				for(var key : Object in a){
+					trace(key);
+				}
+				*/
+				
+				/*
+				var a : Array = [1,2,3,4,5,6,7,8,9,0];
+				for each(var item : Object in a){
+					trace(item);
+				}
+				*/
+				/*
+				var person : Object = {};
+				person.age = 20;
+				person.gender = '男'
+				person.name = '张三';
+				
+				for each(var item : Object in person){
+					trace(item);
+				}
+				*/
+				loop0:
+				
+				for(var i: int = 0; i < 10; i++){
+					loop1:
+					
+					for(var j: int = 0; j < 10; j++){
+						
+						loop2:
+						for(var k: int = 0; k < 10; k++){
+							trace('i=',i,'j=',j,'k=',k);
+							if(k == 3){
+								continue loop1;
+							}else if(j == 2){
+								break loop0;
+							}
+						}
+					}
+				}
+			}
+
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+</s:WindowedApplication>

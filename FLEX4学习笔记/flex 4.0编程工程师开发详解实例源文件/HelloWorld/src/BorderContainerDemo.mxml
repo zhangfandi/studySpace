@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					   xmlns:s="library://ns.adobe.com/flex/spark" 
+					   xmlns:mx="library://ns.adobe.com/flex/mx" backgroundColor="#78FF00"
+					   creationComplete="windowedapplication1_creationCompleteHandler(event)"
+					   >
+	<s:layout>
+		<s:BasicLayout/>
+	</s:layout>
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+
+			protected function windowedapplication1_creationCompleteHandler(event:FlexEvent):void
+			{
+				// TODO Auto-generated method stub
+				bc.borderStroke;
+				bc.setStyle('borderVisible',true);
+			}
+
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<s:BorderContainer id="bc" x="10" y="10" width="200" height="200" borderColor="#FF0000" borderAlpha="0.5" borderWeight="3" cornerRadius="10" borderVisible="false" dropShadowVisible="true" backgroundColor="#C0C0C0" backgroundAlpha="0.51">
+	</s:BorderContainer>
+</s:WindowedApplication>

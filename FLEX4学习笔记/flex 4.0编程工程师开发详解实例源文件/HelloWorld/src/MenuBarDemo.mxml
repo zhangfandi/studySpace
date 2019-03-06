@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					   xmlns:s="library://ns.adobe.com/flex/spark" 
+					   xmlns:mx="library://ns.adobe.com/flex/mx">
+	<s:layout>
+		<s:BasicLayout/>
+	</s:layout>
+	<fx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			import mx.events.MenuEvent;
+
+			protected function menubar1_itemClickHandler(event:MenuEvent):void
+			{
+				// TODO Auto-generated method stub
+				Alert.show(event.item.@label);
+			}
+
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<mx:MenuBar x="118" y="124" labelField="@label" itemClick="menubar1_itemClickHandler(event)">  
+		<mx:dataProvider>
+			<mx:XMLListCollection>  
+				<fx:XMLList>  
+					<menu label="主菜单1">
+						<item label="被禁止的菜单" enabled="false" />  
+						<item label="正常的菜单项1" />
+						<item label="正常的菜单项2" />
+						<item label="这是一条分割线，不会显示文字" type="separator" />
+						<item label="正常的菜单项3" />  
+					</menu>  
+					<menu label="主菜单2">  
+						<item label="多选菜单1" type="check" groupName="test" toggled="true" />
+						<item label="多选菜单2" type="check" groupName="test" />
+						<item label="多选菜单3" type="check" groupName="test" />
+						<item label="这是一条分割线，不会显示文字" type="separator" />
+						<item label="单选菜单1" type="radio" groupName="test2" />
+						<item label="单选菜单2" type="radio" groupName="test2" toggled="true" />
+						<item label="单选菜单3" type="radio" groupName="test2" />
+					</menu>                     
+				</fx:XMLList>  
+			</mx:XMLListCollection>  
+		</mx:dataProvider>  
+	</mx:MenuBar> 
+
+</s:WindowedApplication>

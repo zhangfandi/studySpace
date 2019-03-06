@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					   xmlns:s="library://ns.adobe.com/flex/spark" 
+					   xmlns:mx="library://ns.adobe.com/flex/mx"
+					   creationComplete="windowedapplication1_creationCompleteHandler(event)">
+	<s:layout>
+		<s:BasicLayout/>
+	</s:layout>
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+
+			protected function windowedapplication1_creationCompleteHandler(event:FlexEvent):void
+			{
+				// TODO Auto-generated method stub
+				/*
+				var arr : Array;
+				arr = new Array();
+				arr = [];
+				
+				arr = new Array(1,2,3);
+				trace(arr);
+				arr = [1,2,3];
+				trace(arr);
+				trace(arr[0]);
+				*/
+				/*
+				var person : Object;
+				person = new Object();
+				person = {};
+				
+				person.age = 23;
+				person["na me"] = "xiao li";
+				
+				trace(person);
+				trace(person.age);
+				trace(person["na me"]);
+				
+				var person2 : Object;
+				person2 = person;
+				
+				var i : int = 10;
+				var j : int;
+				
+				j = i;
+				
+				person2.age = 20;
+				j = 11;
+				
+				trace(person.age);
+				trace(i);
+				*/
+				
+				/*
+				const c : int = 10;
+				
+				//c = 100;
+				
+				const o : Object = {};
+				
+				//o = new Object();
+				o.age = 10;
+				
+				var person : Object = {};
+				person.age = 20;
+				person.name = 'xiaoli';
+				trace('age' in person);
+				
+				delete person.age;
+				trace('age' in person);
+				
+				trace (typeof person);
+				trace (typeof person.name);
+				trace (typeof 9);
+				
+				trace(9 is Number);
+				trace(9 is Object);
+				trace(9 is String);
+				var o : int;
+				trace(o is Number);
+				*/
+				var i : int = 10;
+				var o : Object = i as Object;
+				var n : Number = o as Number;
+				trace(i);
+				trace(o);
+				trace(n);
+				
+				var a : Array = i as Array;
+				trace (a);
+			}
+
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+</s:WindowedApplication>

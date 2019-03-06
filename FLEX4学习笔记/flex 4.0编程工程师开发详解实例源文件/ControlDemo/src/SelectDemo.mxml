@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					   xmlns:s="library://ns.adobe.com/flex/spark" 
+					   xmlns:mx="library://ns.adobe.com/flex/mx">
+	<s:layout>
+		<s:BasicLayout/>
+	</s:layout>
+	<fx:Declarations>
+		<s:RadioButtonGroup id="radiogroup1"/>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<s:CheckBox x="19" y="24" label="CheckBox"/>
+	<s:CheckBox x="19" y="50" label="CheckBox"/>
+	<s:CheckBox x="19" y="76" label="CheckBox"/>
+	<s:RadioButton x="19" y="127" label="单选框"/>
+	<s:RadioButton x="19" y="153" label="单选框"/>
+	<s:RadioButton x="19" y="179" label="单选框"/>
+	<s:RadioButton x="135" y="127" label="单选框" groupName="aaa"/>
+	<s:RadioButton x="135" y="153" label="单选框" groupName="aaa"/>
+	<s:RadioButton x="135" y="179" label="单选框" groupName="aaa"/>
+	<s:RadioButton x="229" y="127" label="按钮 1" groupName="radiogroup1"/>
+	<s:RadioButton x="229" y="153" label="按钮 2" groupName="radiogroup1"/>
+</s:WindowedApplication>

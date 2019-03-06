@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					   xmlns:s="library://ns.adobe.com/flex/spark" 
+					   xmlns:mx="library://ns.adobe.com/flex/mx"
+					   creationComplete="windowedapplication1_creationCompleteHandler(event)">
+	<s:layout>
+		<s:HorizontalLayout/>
+	</s:layout>
+	<fx:Script>
+		<![CDATA[
+			import mx.events.CloseEvent;
+			import mx.events.FlexEvent;
+			import mx.managers.PopUpManager;
+
+			protected function windowedapplication1_creationCompleteHandler(event:FlexEvent):void
+			{
+				// TODO Auto-generated method stub
+				this.removeElement(popWindow);
+				PopUpManager.addPopUp(popWindow,this);
+				popWindow.visible = true;
+				PopUpManager.centerPopUp(popWindow);
+			}
+
+
+			protected function popWindow_closeHandler(event:CloseEvent):void
+			{
+				// TODO Auto-generated method stub
+				PopUpManager.removePopUp(popWindow);
+			}
+
+
+			protected function titlewindow1_closeHandler(event:CloseEvent):void
+			{
+				// TODO Auto-generated method stub
+				win1.visible = false;
+				win1.includeInLayout = false;
+			}
+
+
+			protected function button1_clickHandler(event:MouseEvent):void{
+				// TODO Auto-generated method stub
+				win1.visible = true;
+				win1.includeInLayout = true;
+			}
+
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<s:TitleWindow id="popWindow" visible="false" x="10" y="10" width="250" height="200" close="popWindow_closeHandler(event)">
+	</s:TitleWindow>
+	<s:TitleWindow id="win1" x="10" y="10" width="250" height="200" close="titlewindow1_closeHandler(event)">
+	</s:TitleWindow>
+	<s:Button x="268" y="10" label="按钮" click="button1_clickHandler(event)"/>
+</s:WindowedApplication>

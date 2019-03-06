@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="600" minHeight="400"
+			   creationComplete="application1_creationCompleteHandler(event)"
+			   >
+	<fx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			import mx.events.FlexEvent;
+
+			protected function application1_creationCompleteHandler(event:FlexEvent):void
+			{
+				// TODO Auto-generated method stub
+				ExternalInterface.addCallback('setLabel', jsCallBack);
+			}
+			
+			private function jsCallBack(value:String):String{
+				label.text = 'js传递过来了字符串' + value
+				return value.toLocaleUpperCase();
+			}
+
+			protected function button1_clickHandler(event:MouseEvent):void{
+				var str:String =
+					ExternalInterface.call('flexCallBack','这是Flex传递过来的字符串');
+				
+				Alert.show(str);
+			}
+
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<s:Button x="10" y="23" label="调用JS" click="button1_clickHandler(event)"/>
+	<s:Label id="label" x="10" y="52"/>
+</s:Application>

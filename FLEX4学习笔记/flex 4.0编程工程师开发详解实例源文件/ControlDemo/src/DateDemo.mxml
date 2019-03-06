@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					   xmlns:s="library://ns.adobe.com/flex/spark" 
+					   xmlns:mx="library://ns.adobe.com/flex/mx">
+	<s:layout>
+		<s:BasicLayout/>
+	</s:layout>
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<mx:DateChooser x="10" y="10"
+					dayNames="['日','一','二','三','四','五','六']"
+					monthNames="['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月']"
+					allowMultipleSelection="true"
+					allowDisjointSelection="true"
+					maxYear="2012"
+					minYear="2010"
+					disabledDays="[0,6]"
+					disabledRanges="{[
+						{rangeStart: new Date(2011,10,3), rangeEnd:new Date(2011,10,3)}
+					]}"
+					selectableRange="{{rangeStart: new Date(2011,10,1), rangeEnd:new Date(2011,10,11)}}"
+
+					selectedRanges="{[
+						{rangeStart: new Date(2011,10,5), rangeEnd:new Date(2011,10,9)}
+					]}"
+					yearSymbol=" "
+					monthSymbol=" "
+					/>
+	<mx:DateField x="214" y="10" selectedDate="{new Date()}" formatString="YYYY:MM:DD" />
+</s:WindowedApplication>

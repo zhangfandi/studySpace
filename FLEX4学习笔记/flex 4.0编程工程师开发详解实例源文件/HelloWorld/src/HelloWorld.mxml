@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					   xmlns:s="library://ns.adobe.com/flex/spark" 
+					   xmlns:mx="library://ns.adobe.com/flex/mx"
+					   xmlns:p="person.*"
+					   initialize="windowedapplication1_initializeHandler(event)">
+	<fx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			import mx.events.FlexEvent;
+			
+			import person.Man;
+			
+			//public var p:Person = new Person();
+
+			protected function windowedapplication1_initializeHandler(event:FlexEvent):void
+			{
+				// TODO Auto-generated method stub
+				trace("hello world");
+				Alert.show("hello world");
+				var abc:int = 100;
+				var hello : String = 'hello world';
+				trace(hello);
+				
+				var b : Boolean = true;
+				trace(b);
+				
+				var i : Number = 0.1;
+				
+				trace( i + i + i);
+				var max : Number = 100000000;
+				var min : Number = 0.000000001;
+				trace(max + min);
+				
+				var string : String; //null
+				var str1 : String = ""; //''
+				var str2: String = new String();
+
+				trace(p.age);
+				label.text="hello mxml";
+			}
+
+		]]>
+	</fx:Script>
+
+	<fx:Style>
+		@namespace s "library://ns.adobe.com/flex/spark";
+		@namespace mx "library://ns.adobe.com/flex/mx";
+		@namespace p "person.*";
+		s|Label{font-size:20px;font-weight:bold;color:#ff0000}
+		
+	</fx:Style>
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+		<p:Person id="p" age="20">
+			
+		</p:Person>
+	</fx:Declarations>
+	<s:layout>
+		<s:BasicLayout/>
+	</s:layout>
+	<s:Label id="label" x="50" y="50" text="hello world"
+			 />
+	<s:Button
+		top="100"
+		bottom="100"
+		left="50"
+		right="50"
+		label="我是一个按钮"
+		>
+		
+	</s:Button>
+	
+</s:WindowedApplication>

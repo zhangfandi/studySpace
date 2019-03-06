@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx"
+			   minWidth="955" minHeight="600"
+			   creationComplete="application1_creationCompleteHandler(event)">
+	<s:layout>
+		<s:BasicLayout/>
+	</s:layout>
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.binding.utils.BindingUtils;
+			import mx.binding.utils.ChangeWatcher;
+			import mx.events.FlexEvent;
+			import mx.events.PropertyChangeEvent;
+			[Bindable]
+			private var person:Person = new Person();
+			protected function clickHandler(event:MouseEvent):void{
+				person.name = input.text;
+			}
+
+			protected function application1_creationCompleteHandler(event:FlexEvent):void
+			{
+				// TODO Auto-generated method stub
+				var cw:ChangeWatcher = BindingUtils.bindProperty(textD, 'text', textC, 'text');
+				BindingUtils.bindSetter(seterTest, textD, 'text');
+				ChangeWatcher.watch(textC, 'text', watcherTest);
+				
+				cw.unwatch();
+				cw.reset(textD);
+			}
+			
+			private function seterTest(value:Object):void{
+				var s:String = value as String;
+				label.text = s.toLocaleUpperCase();
+			}
+			
+			private function watcherTest(event:PropertyChangeEvent):void{
+				label.text = '原值：' + event.oldValue + '\n' + 
+							 '新值：' + event.newValue;
+			}
+
+		]]>
+	</fx:Script>
+	<fx:Binding source="textA.text"  destination="textB.text" twoWay="true" />
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+		
+	</fx:Declarations>
+	<s:Button x="10" y="10" label="按钮" click="clickHandler(event)"/>
+	<s:TextInput id="input" x="88" y="10"/>
+	<s:Label id="label" x="88" y="76" text="{person.name}"/>
+	
+	<s:TextInput x="88" y="100" text="@{person.name}"/>
+	<s:TextInput id="textA" x="92" y="239"/>
+	<s:TextInput id="textB" x="261" y="239"/>
+	<s:TextInput id="textC" x="92" y="290"/>
+	<s:TextInput id="textD" x="261" y="290"/>
+</s:Application>

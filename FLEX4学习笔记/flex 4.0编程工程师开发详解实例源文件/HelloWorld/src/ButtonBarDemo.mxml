@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					   xmlns:s="library://ns.adobe.com/flex/spark" 
+					   xmlns:mx="library://ns.adobe.com/flex/mx">
+	<s:layout>
+		<s:VerticalLayout/>
+	</s:layout>
+
+	<fx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			import mx.events.ItemClickEvent;
+			protected function buttonbar1_clickHandler(event:MouseEvent):void
+			{
+				// TODO Auto-generated method stub
+				Alert.show(event.target.label);
+			}
+
+			protected function buttonbar2_itemClickHandler(event:ItemClickEvent):void
+			{
+				// TODO Auto-generated method stub
+				Alert.show(event.label);
+			}
+
+		]]>
+	</fx:Script>
+
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<s:ButtonBar click="buttonbar1_clickHandler(event)"> 
+		<s:layout>
+			<s:HorizontalLayout/>
+		</s:layout>
+		<s:dataProvider>
+			<s:ArrayList>
+				<fx:String>第一个按钮</fx:String> 
+				<fx:String>第二个按钮</fx:String> 
+				<fx:String>第三个按钮</fx:String> 
+				<fx:String>第四个按钮</fx:String> 
+			</s:ArrayList>
+		</s:dataProvider> 
+	</s:ButtonBar>
+	
+	<mx:ButtonBar itemClick="buttonbar2_itemClickHandler(event)">
+		<mx:dataProvider>
+			<s:ArrayList>
+				<fx:String>第一个无状态按钮</fx:String> 
+				<fx:String>第二个无状态按钮</fx:String> 
+				<fx:String>第三个无状态按钮</fx:String> 
+				<fx:String>第四个无状态按钮</fx:String> 
+			</s:ArrayList>
+		</mx:dataProvider> 
+	</mx:ButtonBar>
+	
+	<mx:ToggleButtonBar toggleOnClick="true"> 
+		<mx:dataProvider>
+			<s:ArrayList>
+				<fx:String>第一个有状态按钮</fx:String> 
+				<fx:String>第二个有状态按钮</fx:String> 
+				<fx:String>第三个有状态按钮</fx:String> 
+				<fx:String>第四个有状态按钮</fx:String> 
+			</s:ArrayList>
+		</mx:dataProvider> 
+	</mx:ToggleButtonBar>
+	
+</s:WindowedApplication>

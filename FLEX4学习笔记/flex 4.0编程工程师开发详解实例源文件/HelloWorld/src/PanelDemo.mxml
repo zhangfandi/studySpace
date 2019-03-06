@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					   xmlns:s="library://ns.adobe.com/flex/spark" 
+					   xmlns:mx="library://ns.adobe.com/flex/mx">
+	<s:layout>
+		<s:BasicLayout/>
+	</s:layout>
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<s:Panel x="36" y="45" width="250" height="200" title="Panel的标题" borderColor="#FF0000" cornerRadius="20" backgroundColor="#999999">
+		<s:controlBarContent>
+			<s:Button label="按钮"/>
+		
+		</s:controlBarContent>
+	</s:Panel>
+</s:WindowedApplication>

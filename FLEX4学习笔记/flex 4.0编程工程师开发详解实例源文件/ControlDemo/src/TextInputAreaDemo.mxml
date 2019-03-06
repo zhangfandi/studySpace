@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					   xmlns:s="library://ns.adobe.com/flex/spark" 
+					   xmlns:mx="library://ns.adobe.com/flex/mx">
+	<s:layout>
+		<s:BasicLayout/>
+	</s:layout>
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<s:TextInput x="69" y="21" width="188"/>
+	<s:TextArea x="69" y="53" lineBreak="explicit">
+		Hello <s:span fontWeight="bold">World</s:span>
+	</s:TextArea>
+	<s:Label x="25" y="27" text="标题："/>
+	<s:Label x="27" y="60" text="内容："/>
+</s:WindowedApplication>

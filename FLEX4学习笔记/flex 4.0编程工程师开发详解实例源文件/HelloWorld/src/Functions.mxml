@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					   xmlns:s="library://ns.adobe.com/flex/spark" 
+					   xmlns:mx="library://ns.adobe.com/flex/mx"
+					   creationComplete="windowedapplication1_creationCompleteHandler(event)">
+	<s:layout>
+		<s:BasicLayout/>
+	</s:layout>
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+
+			protected function windowedapplication1_creationCompleteHandler(event:FlexEvent):void
+			{
+				// TODO Auto-generated method stub
+				/*
+				var fun : Function ;
+				
+				//fun(1);
+				fun1(2);
+				fun2(20);
+				
+				fun = function(i:int):void{
+					trace('fun=',i);
+				};
+				
+				function fun1(i:int):void{
+					trace('fun1=',i);
+				}
+				*/
+				//fun3(10);
+				//fun3();
+				
+				//fun4(1,2,3,4);
+				fun3(1,2);
+			}
+			
+			function fun2(i:int):void{
+				trace('fun2=',i);	
+			}
+			
+			function fun3(i:int=0, j:int = 10):void{
+				//trace('fun3 i=',i);
+				//trace('fun3 j=',j);
+				trace(arguments.length);
+				trace(arguments[0]);
+				trace(typeof arguments);
+			}
+			
+			function fun4(...param):void{
+				for each(var i : Object in param){
+					trace(i);
+				}
+				
+			}
+
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+</s:WindowedApplication>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="366" height="50">
+	<s:layout>
+		<s:HorizontalLayout paddingLeft="10" paddingRight="10" paddingTop="10" paddingBottom="10"/>
+	</s:layout>
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			[Bindable]
+			public var mark : Number = 0;
+		]]>
+	</fx:Script>
+	<s:Label text="得分：" fontSize="36"/>
+	<s:Label text="{mark}" fontSize="36" color="#FF0000" paddingTop="5"/>
+</s:Group>

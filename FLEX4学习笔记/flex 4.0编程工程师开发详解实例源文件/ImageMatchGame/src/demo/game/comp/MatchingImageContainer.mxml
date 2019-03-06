@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:BorderContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				   xmlns:s="library://ns.adobe.com/flex/spark" 
+				   xmlns:mx="library://ns.adobe.com/flex/mx"
+				   width="{imageWidth * columnNumber}"
+				   height="{imageHeight * rowNumber}"
+				   borderVisible="false"
+				   backgroundAlpha="0"
+				   >
+	<s:layout>
+		<s:TileLayout horizontalAlign="center"
+					  horizontalGap="0"
+					  verticalAlign="middle"
+					  verticalGap="0"
+					  columnWidth="{imageWidth}"
+					  requestedColumnCount="{columnNumber}"
+					  requestedRowCount="{rowNumber}"
+					  rowHeight="{imageHeight}"
+					  />
+	</s:layout>
+	<fx:Declarations>
+		<!-- 点击图片时显示的滤镜，在原图片上加黄色的外发光效果，8个像素 -->
+		<s:GlowFilter id="filter"
+					  color="0xFFFF00"
+					  strength="100"
+					  blurX="8"
+					  blurY="8"
+					  />
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import demo.game.event.MatchingEvent;
+			
+			import mx.controls.Image;
+			[Bindable]
+			public var imageWidth : Number = 64;
+			[Bindable]
+			public var imageHeight : Number = 64;
+			
+			[Bindable]
+			public var columnNumber : int = 2; //列数
+			[Bindable]
+			public var rowNumber : int = 2; //行数
+			
+			public static const nullImage : Image = new Image(); //设置一个空图片，简化判断逻辑
+			private var _matchImages : Array = [nullImage];
+			private var _matchLength : uint = 2;
+			
+			public function addImage(image:Image):void{
+				if(numElements == columnNumber * rowNumber)
+					return;
+				
+				image.width = imageWidth;
+				image.height = imageHeight;
+				image.maintainAspectRatio = false; //解除宽高比
+				image.buttonMode = true;//手指鼠标指针
+				image.addEventListener(MouseEvent.CLICK, imageMouseClickHandler);
+				
+				addElement(image);
+			}
+			
+			/**
+			 * 图片被点击后的响应
+			 */
+			private function imageMouseClickHandler(event:MouseEvent):void{
+				var img1 : Image = matchImages.pop();
+				var img2 : Image = event.target as Image;
+				
+				if(img1 != img2 && img1.source == img2.source)
+					matchImages.push(img1);
+				else
+					unSelectImage(img1);
+				
+				selectImage(img2);
+				
+				if(matchImages.push(img2) == matchLength){
+					dispatchEvent(new MatchingEvent(MatchingEvent.PIC_MATCHING_FOUND, matchImages.slice()));
+					clearMatch();
+				}
+			}
+			
+			/**
+			 * 清除匹配图片数组
+			 */
+			public function clearMatch():void{
+				for(var i:int = 0, len:int = matchImages.length; i < len; i++)
+					unSelectImage(matchImages.pop());
+				
+				matchImages[0] = nullImage;
+			}
+			
+			/**
+			 * 选择图片，给选定的图片加上滤镜效果
+			 */
+			public function selectImage(image:Image):void{
+				image.filters = [filter];
+				image.depth = 1;
+			}
+			
+			/**
+			 * 清除选定的图片的滤镜效果
+			 */
+			public function unSelectImage(image:Image):void{
+				image.filters = null;
+				image.depth = 0;
+			}
+			
+			/**
+			 * 按照方格的行列值，返回给定坐标的图片
+			 */
+			public function getImage(x:int, y:int):Image{
+				var index:Number = y * columnNumber + x;
+				
+				if(x < 0 || x >= columnNumber || y < 0 || y >= rowNumber || index >= numElements)
+					return nullImage;
+				
+				return getElementAt(index) as Image;
+			}
+			
+			/**
+			 * 按照方格的行列值，返回给定图片的行列坐标
+			 */
+			public function getImagePoint(image:Image):Point{
+				var point : Point = new Point();
+				var index : int = getElementIndex(image);
+				point.x = index % columnNumber;
+				point.y = Math.floor(index / columnNumber);
+				return point;
+			}
+			
+			/**
+			 * 按照方格的行列值，返回给定行列坐标图片的中心像素点
+			 */
+			public function pointToPixel(point:Point):Point{
+				return new Point((point.x + 0.5 ) * imageWidth, (point.y + 0.5) * imageHeight);
+			}
+			
+			public function get matchImages():Array{
+				return _matchImages;
+			}
+			
+			public function get matchLength():uint{
+				return _matchLength;
+			}
+			
+			public function set matchLength(value:uint):void{
+				if(value > 1)
+					_matchLength = value;
+			}
+		]]>
+	</fx:Script>
+</s:BorderContainer>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					   xmlns:s="library://ns.adobe.com/flex/spark" 
+					   xmlns:mx="library://ns.adobe.com/flex/mx">
+	<s:layout>
+		<s:BasicLayout/>
+	</s:layout>
+
+	<fx:Script>
+		<![CDATA[
+			import flashx.textLayout.conversion.TextConverter;
+			protected function button1_clickHandler(event:MouseEvent):void
+			{
+				// TODO Auto-generated method stub
+				//rich.text = editor.text; //纯文本，不带有格式的显示
+				//rich.content = editor.htmlText;	//editor是HTML格式编辑器，
+													//richText是TLF格式富文本，这样不兼容
+				rich.textFlow = TextConverter.importToFlow(editor.htmlText,
+															TextConverter.TEXT_FIELD_HTML_FORMAT);
+			}
+		]]>
+	</fx:Script>
+
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<mx:RichTextEditor id="editor" x="10" y="6"/>
+	<s:RichText x="10" y="318" text="RichText" id="rich"/>
+	<s:Button x="343" y="10" label="按钮" click="button1_clickHandler(event)"/>
+</s:WindowedApplication>

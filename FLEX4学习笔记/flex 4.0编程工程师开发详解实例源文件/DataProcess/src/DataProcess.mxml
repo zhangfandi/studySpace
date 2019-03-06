@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx"
+			   minWidth="955" minHeight="600"
+			   creationComplete="application1_creationCompleteHandler(event)"
+			   >
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import com.adobe.serialization.json.JSON;
+			
+			import mx.controls.Alert;
+			import mx.events.FlexEvent;
+			
+
+			protected function application1_creationCompleteHandler(event:FlexEvent):void
+			{
+				var p:Person = new Person();
+				
+				p.age = 20;
+				p.name = '小明';
+				p.gender = '男';
+				
+				var s : String="abc";
+				
+				var o : Object ={
+								property1 : 123,
+								property2 : true,
+								property3 : 'abc'
+							};
+				
+				var arr:Array = [s,o,p];
+				var str:String = JSON.encode(arr);
+				json.text = str;
+			}
+
+
+			protected function button1_clickHandler(event:MouseEvent):void
+			{
+				Alert.show(JSON.decode(json.text));
+			}
+
+		]]>
+	</fx:Script>
+	<s:TextArea x="10" y="10" width="439" height="274" id="json"/>
+	<s:Button x="10" y="292" label="按钮" click="button1_clickHandler(event)"/>
+</s:Application>
