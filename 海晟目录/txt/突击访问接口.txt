@@ -1,0 +1,54 @@
+	/**
+	 * 获取烟农列表（编号，姓名，身份证号码，地址等）
+	 * @param searchCondition 模糊查询条件（frmCd,frmName,certificateNo）
+	 * @param divisionUniqueCd 行政单位
+	 * @param ptYear 生产年度
+	 * @param oprId 操作人员id
+	 * @param pageNumber 页码
+	 * @param pageSize 页大小
+	 * @param map 其他查询条件
+	 * @return
+	 */
+	public Page findFamerListYn(Map searchCondition, String divisionUniqueCd, int ptYear,
+							   String oprId, int pageNumber, int pageSize, Map map);
+
+	/**
+	 * 获取该单位或本人的某个烟农所有阶段完成情况及相关阶段信息
+	 * @param orgUniqueCd 组织代码
+	 * @param frmId 烟农id
+	 * @param oprId 操作人员id
+	 * @param ptYear 生产年度
+     * @return
+     */
+	public List<Map> findTaskMasListYn(String orgUniqueCd, String frmId, String oprId, int ptYear);
+
+    /**
+     * 查找大类下所涉及的调查任务主表和bodySet及检查任务相关信息
+     * @param billCategoryId
+     * @param frmId
+     * @param orgUniqueCd
+     * @param oprId
+     * @param ptYear
+     * @param returnState
+     * @return
+     */
+    public Map findSurpriseVisitDataYn(String billCategoryId, String frmId, String orgUniqueCd,
+                                       String oprId, int ptYear, String returnState);
+
+    /**
+     * 通过组织单位查询该单位下的总任务数，以及已完成的任务数
+     * @param orgUniqueCd
+     * @param ptYear
+     * @param oprId
+     * @return
+     */
+	public Map findTaskCompInfo(String orgUniqueCd, int ptYear, String oprId);
+
+    /**
+     * 获取该单位或本人完成的工作目标列表
+     * @param orgUniqueCd
+     * @param ptYear
+     * @param oprId
+     * @return
+     */
+    public List<Map> findTaskInfoList(String orgUniqueCd, int ptYear, String oprId);

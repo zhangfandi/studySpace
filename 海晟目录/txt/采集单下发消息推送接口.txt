@@ -1,0 +1,18 @@
+
+url地址：http://10.188.182.162:8080/app/collectPublish/taskPush
+
+	http://10.188.182.162:8080 为我本地的服务地址，这个到时需要配置成现场的
+	
+调用方法：GET/POST
+
+参数：
+String taskName: 任务名称
+String taskId：任务ID
+String pushUsers：推送人员id；多个人员以,号分割
+
+返回结果示例
+	发送成功：
+{"errorResponse":"","successResponse":true,"successful":true}
+
+	发送失败：
+{'errorResponse':'未获取到平台账号，pushUsers：C05D280B19664D03994AA95DBAD52654','successful':false}
