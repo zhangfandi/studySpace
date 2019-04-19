@@ -1,3 +1,99 @@
+--增加加工表（R_PT_FOR_SEED_FM_Y）字段（BIG_CANOPY_ID，BIG_CANOPY_NAME）
+ALTER TABLE R_PT_FOR_SEED_FM_Y ADD BIG_CANOPY_ID VARCHAR(32);
+ALTER TABLE R_PT_FOR_SEED_FM_Y ADD BIG_CANOPY_NAME VARCHAR(64);
+
+------------------------------------------------------------
+--
+--
+--
+--
+------------------------------------------------------------
+--DROP VIEW TSO.V_PT_FOR_SEED_AB_D;
+CREATE VIEW TSO.V_PT_FOR_SEED_AB_D
+ AS 
+SELECT DISTINCT
+    A.DATA_STORE_BASE_TBL_ID AS ID,
+    A.PT_YEAR                AS BUSINESS_YEAR,
+    A.C6                     AS FARMER_ID, --烟农ID
+    A.C2                     AS FARMER_CD, --烟农编号
+    A.C3                     AS FARMER_NAME, --烟农名称
+    A.C4                     AS LEAF_VARIETY_CD, --烟叶品种代码
+    N.LEAF_VARIETY_NAME      AS LEAF_VARIETY_NAME, --烟叶品种名称
+    A.N1                     AS SUPPLY_AREA, --供苗面积(亩)
+    A.N2                     AS SUPPLY_QTY, --供苗株数(株)
+    A.RELA_OBJECT_ID     AS GROW_POINT_ID, --育苗点ID
+    A.RELA_OBJECT_CD     AS GROW_POINT_CD, --育苗点编号
+    A.RELA_OBJECT_NAME   AS GROW_POINT_NAME, --育苗点名称
+    J.NAME               AS GROW_POINT_TYPE_NAME, --育苗点设施类型名称
+    A.CLT_OBJ_ID         AS BIG_CANOPY_ID, --育苗棚ID(指标)
+    A.CLT_OBJ_CD         AS BIG_CANOPY_CD, --育苗棚编号(指标)
+    A.CLT_OBJ_NAME       AS BIG_CANOPY_NAME, --育苗棚名称(指标)
+    H.BIG_CANOPY_TYPE_CD AS BIG_CANOPY_TYPE_CD, --育苗棚类型编号
+    K.NAME               AS CANOPY_TYPE_NAME, --育苗棚设施类型名称
+    A.FEEDBACK_PSN_ID   AS TECHNICAN_ID, --烟技员ID
+    G.PSN_NAME          AS TECHNICAN_NAME, --烟技员名称
+    G.MOBILE            AS TECHNICAN_PHONE, --烟技员电话
+    I.STATION_UNIQUE_CD AS ORG_CD,
+    I.VILLAGE_UNIQUE_CD AS AREA_CD,
+    A.SEND_STATE,
+    A.DATA_STATE,
+    A.MODIFY_TIME,
+    A.LAST_TIME
+FROM
+    PT_DC_STAT_DATA_B A
+    /*职工档案信息*/
+LEFT JOIN
+    CM_OM_STAFF G ON A.FEEDBACK_PSN_ID = G.STAFF_ID
+    /*育苗棚信息*/
+LEFT JOIN
+    TP_BIG_CANOPY H ON A.CLT_OBJ_ID = H.BIG_CANOPY_ID
+    /*育苗点档案信息*/
+LEFT JOIN
+    TP_GROW_POINT I ON A.RELA_OBJECT_ID = I.GROW_POINT_ID
+    /*育苗点设施类型信息*/
+LEFT JOIN
+    CM_OT_ENUM_TYPE J ON I.TYPE_CD = J.ENUM_KEY
+    /*育苗棚设施类型信息*/
+LEFT JOIN
+    CM_OT_ENUM_TYPE K ON H.BIG_CANOPY_TYPE_CD = K.ENUM_KEY
+LEFT JOIN
+    PT_AS_CANOPY_SET M ON H.BIG_CANOPY_ID = M.CANOPY_ID
+LEFT JOIN
+    CM_TB_LEAF_VARIETY N ON A.C4 = N.LEAF_VARIETY_CD
+WHERE
+    A.DATA_STATE = '1'
+AND A.BILL_NO = 'TJ23000000000021'
+AND G.DATA_STATE='1'
+AND H.DATA_STATE='1'
+AND I.DATA_STATE='1'
+    /*育苗点设施类型枚举*/
+AND J.DATA_STATE='1'
+AND J.ENUM_TYPE_CD = 'GROW_POINT_TYPE_EK_PD'
+    /*育苗棚设施类型枚举*/
+AND K.DATA_STATE='1'
+AND K.ENUM_TYPE_CD = 'CANOPY_TYPE_EK'
+    /*育苗棚苗床面积设置*/
+AND M.DATA_STATE='1'
+AND M.PT_YEAR = A.PT_YEAR
+AND N.DATA_STATE='1'
+AND N.RELATE_BIZ_EK LIKE '%CONTRACT%'
+AND A.CHECK_STATE = '1'
+AND EXISTS
+    (
+        SELECT
+            1
+        FROM
+            TSO.PT_AS_TLG_FACILITY D
+        WHERE
+            D.FACILITY_ID = A.CLT_OBJ_ID
+        AND D.DATA_STATE='1'
+        AND D.PT_YEAR = A.PT_YEAR
+        AND D.FACILITY_TYPE_EK='GROW_SHACK')
+  ;
+
+  DROP NICKNAME DCCELL.V_PT_FOR_SEED_AB_D ;
+CREATE NICKNAME DCCELL.V_PT_FOR_SEED_AB_D      FOR TSOSERVER.TSO.V_PT_FOR_SEED_AB_D;
+
 DROP PROCEDURE DCCELL.P_R_PT_FOR_SEED_AB_D;
 CREATE PROCEDURE DCCELL.P_R_PT_FOR_SEED_AB_D
 BEGIN
