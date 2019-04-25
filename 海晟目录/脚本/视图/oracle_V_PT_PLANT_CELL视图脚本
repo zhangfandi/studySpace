@@ -28,9 +28,9 @@ SELECT DISTINCT
 	
 	A.ORG_UNIQUE_CD              AS ORG_CD,
   F.ORG_CD                     AS SSTC,
-  F.ORG_ABBR                   AS SSTC_NAME,
+  F.ORG_NAME                   AS SSTC_NAME,
   G.ORG_CD                     AS STAC,
-  G.ORG_ABBR                   AS STAC_NAME,
+  G.ORG_NAME                   AS STAC_NAME,
   H.ORG_CD                     AS COUC,
   H.ORG_ABBR                   AS COUC_NAME,
   I.ORG_CD                     AS CITC,
