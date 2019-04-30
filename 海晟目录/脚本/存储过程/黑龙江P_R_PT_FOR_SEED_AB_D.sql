@@ -1,29 +1,27 @@
---增加加工表（R_PT_FOR_SEED_FM_Y）字段（BIG_CANOPY_ID，BIG_CANOPY_NAME）
-ALTER TABLE R_PT_FOR_SEED_FM_Y ADD BIG_CANOPY_ID VARCHAR(32);
-ALTER TABLE R_PT_FOR_SEED_FM_Y ADD BIG_CANOPY_NAME VARCHAR(64);
 
-------------------------------------------------------------
---
---
---
---
-------------------------------------------------------------
---DROP VIEW TSO.V_PT_FOR_SEED_AB_D;
+
+-------------------------------------------------------
+-- 重建视图
+-------------------------------------------------------
+
+DROP VIEW TSO.V_PT_FOR_SEED_AB_D;
 CREATE VIEW TSO.V_PT_FOR_SEED_AB_D
  AS 
 SELECT DISTINCT
     A.DATA_STORE_BASE_TBL_ID AS ID,
     A.PT_YEAR                AS BUSINESS_YEAR,
-    A.C6                     AS FARMER_ID, --烟农ID
+    A.C1                     AS FARMER_ID, --烟农ID
     A.C2                     AS FARMER_CD, --烟农编号
     A.C3                     AS FARMER_NAME, --烟农名称
     A.C4                     AS LEAF_VARIETY_CD, --烟叶品种代码
     N.LEAF_VARIETY_NAME      AS LEAF_VARIETY_NAME, --烟叶品种名称
     A.N1                     AS SUPPLY_AREA, --供苗面积(亩)
     A.N2                     AS SUPPLY_QTY, --供苗株数(株)
+    A.D1                     AS SUPPLY_DATE,--供苗日期
     A.RELA_OBJECT_ID     AS GROW_POINT_ID, --育苗点ID
     A.RELA_OBJECT_CD     AS GROW_POINT_CD, --育苗点编号
     A.RELA_OBJECT_NAME   AS GROW_POINT_NAME, --育苗点名称
+    I.BUILD_DATE         AS POINT_BUILD_YEAR,--育苗点建设年度
     J.NAME               AS GROW_POINT_TYPE_NAME, --育苗点设施类型名称
     A.CLT_OBJ_ID         AS BIG_CANOPY_ID, --育苗棚ID(指标)
     A.CLT_OBJ_CD         AS BIG_CANOPY_CD, --育苗棚编号(指标)
@@ -94,6 +92,10 @@ AND EXISTS
   DROP NICKNAME DCCELL.V_PT_FOR_SEED_AB_D ;
 CREATE NICKNAME DCCELL.V_PT_FOR_SEED_AB_D      FOR TSOSERVER.TSO.V_PT_FOR_SEED_AB_D;
 
+-------------------------------------------------------
+-- 重建存储过程
+-------------------------------------------------------
+
 DROP PROCEDURE DCCELL.P_R_PT_FOR_SEED_AB_D;
 CREATE PROCEDURE DCCELL.P_R_PT_FOR_SEED_AB_D
 BEGIN
@@ -155,7 +157,9 @@ BEGIN
       FARMER_NAME,
       LEAF_VARIETY_NAME,
       GROW_TYPE_NAME, --GROW_POINT_TYPE_NAME
-      CANOPY_TYPE_NAME
+      CANOPY_TYPE_NAME,
+      POINT_BUILD_YEAR,  
+      FOR_SEED_DATE  
   )
   SELECT ID,
       BUSINESS_YEAR,
@@ -169,8 +173,8 @@ BEGIN
       GROW_POINT_CD, 
       GROW_POINT_NAME, 
       LEAF_VARIETY_CD, 
-      SUPPLY_AREA,
-      SUPPLY_QTY,
+      SUPPLY_AREA, 
+      SUPPLY_QTY,  
       ORG_CD,
       AREA_CD,
       TECHNICAN_ID,
@@ -183,7 +187,9 @@ BEGIN
       FARMER_NAME,
       LEAF_VARIETY_NAME,
       GROW_POINT_TYPE_NAME,
-      CANOPY_TYPE_NAME
+      CANOPY_TYPE_NAME,
+      POINT_BUILD_YEAR,
+      SUPPLY_DATE
     FROM V_PT_FOR_SEED_AB_D
    WHERE BUSINESS_YEAR >= V_PT_YEAR
      AND DATA_STATE = '1'
@@ -284,4 +290,4 @@ BEGIN
  ;
   COMMIT;
 
-END;
+END
