@@ -1,35 +1,41 @@
---增加加工表（R_PT_FOR_SEED_FM_Y）字段（BIG_CANOPY_ID，BIG_CANOPY_NAME）
-ALTER TABLE R_PT_FOR_SEED_FM_Y ADD BIG_CANOPY_ID VARCHAR(32);
-ALTER TABLE R_PT_FOR_SEED_FM_Y ADD BIG_CANOPY_NAME VARCHAR(64);
 
-------------------------------------------------------------
---
---
---
---
-------------------------------------------------------------
---DROP VIEW TSO.V_PT_FOR_SEED_AB_D;
+
+-------------------------------------------------------
+-- 重建视图
+-------------------------------------------------------
+
+DROP VIEW TSO.V_PT_FOR_SEED_AB_D;
 CREATE VIEW TSO.V_PT_FOR_SEED_AB_D
  AS 
 SELECT DISTINCT
     A.DATA_STORE_BASE_TBL_ID AS ID,
     A.PT_YEAR                AS BUSINESS_YEAR,
-    A.C6                     AS FARMER_ID, --烟农ID
+    A.C1                     AS FARMER_ID, --烟农ID
     A.C2                     AS FARMER_CD, --烟农编号
     A.C3                     AS FARMER_NAME, --烟农名称
     A.C4                     AS LEAF_VARIETY_CD, --烟叶品种代码
     N.LEAF_VARIETY_NAME      AS LEAF_VARIETY_NAME, --烟叶品种名称
     A.N1                     AS SUPPLY_AREA, --供苗面积(亩)
     A.N2                     AS SUPPLY_QTY, --供苗株数(株)
+    A.D1                     AS SUPPLY_DATE,--供苗日期
     A.RELA_OBJECT_ID     AS GROW_POINT_ID, --育苗点ID
     A.RELA_OBJECT_CD     AS GROW_POINT_CD, --育苗点编号
     A.RELA_OBJECT_NAME   AS GROW_POINT_NAME, --育苗点名称
+    I.BUILD_DATE         AS POINT_BUILD_YEAR,--育苗点建设年度
     J.NAME               AS GROW_POINT_TYPE_NAME, --育苗点设施类型名称
     A.CLT_OBJ_ID         AS BIG_CANOPY_ID, --育苗棚ID(指标)
     A.CLT_OBJ_CD         AS BIG_CANOPY_CD, --育苗棚编号(指标)
     A.CLT_OBJ_NAME       AS BIG_CANOPY_NAME, --育苗棚名称(指标)
     H.BIG_CANOPY_TYPE_CD AS BIG_CANOPY_TYPE_CD, --育苗棚类型编号
     K.NAME               AS CANOPY_TYPE_NAME, --育苗棚设施类型名称
+    CASE
+      WHEN H.COUNTRY_SUBSIDY>0 THEN '是' 
+      ELSE '否'
+    END AS IS_COUNTRY_SUBSIDY,                --育苗棚 是否国补
+    H.BUILD_AREA                 AS LAND_AREA,--育苗棚 占地面积
+    H.LONGITUDE_REAL             AS LONGITUDE,--育苗棚经度
+    H.LATITUDE_REAL              AS LATITUDE, --育苗棚纬度
+    O.SUB_BED_AREA               AS SUB_BED_AREA,--育苗棚 子床面积
     A.FEEDBACK_PSN_ID   AS TECHNICAN_ID, --烟技员ID
     G.PSN_NAME          AS TECHNICAN_NAME, --烟技员名称
     G.MOBILE            AS TECHNICAN_PHONE, --烟技员电话
@@ -60,6 +66,8 @@ LEFT JOIN
     PT_AS_CANOPY_SET M ON H.BIG_CANOPY_ID = M.CANOPY_ID
 LEFT JOIN
     CM_TB_LEAF_VARIETY N ON A.C4 = N.LEAF_VARIETY_CD
+LEFT JOIN 
+    PT_AS_CANOPY_SET O ON H.BIG_CANOPY_ID = O.CANOPY_ID AND O.DATA_STATE='1' AND O.PT_YEAR = A.PT_YEAR
 WHERE
     A.DATA_STATE = '1'
 AND A.BILL_NO = 'TJ23000000000021'
@@ -93,6 +101,10 @@ AND EXISTS
 
   DROP NICKNAME DCCELL.V_PT_FOR_SEED_AB_D ;
 CREATE NICKNAME DCCELL.V_PT_FOR_SEED_AB_D      FOR TSOSERVER.TSO.V_PT_FOR_SEED_AB_D;
+
+-------------------------------------------------------
+-- 重建存储过程
+-------------------------------------------------------
 
 DROP PROCEDURE DCCELL.P_R_PT_FOR_SEED_AB_D;
 CREATE PROCEDURE DCCELL.P_R_PT_FOR_SEED_AB_D
@@ -134,6 +146,7 @@ BEGIN
       GROW_CANOPY_ID,-- BIG_CANOPY_ID
       BIG_CANOPY_ID, 
       GROW_CANOPY_CD, -- BIG_CANOPY_CD
+	  BIG_CANOPY_CD,
       GROW_CANOPY_NAME, --BIG_CANOPY_NAME
       BIG_CANOPY_NAME, 
       CANOPY_TYPE, --BIG_CANOPY_TYPE_CD
@@ -155,13 +168,21 @@ BEGIN
       FARMER_NAME,
       LEAF_VARIETY_NAME,
       GROW_TYPE_NAME, --GROW_POINT_TYPE_NAME
-      CANOPY_TYPE_NAME
+      CANOPY_TYPE_NAME,
+      POINT_BUILD_YEAR,  
+      FOR_SEED_DATE,
+      IS_COUNTRY_SUBSIDY,
+      LONGITUDE,
+      LATITUDE,
+      LAND_AREA,
+      SUB_BED_AREA
   )
   SELECT ID,
       BUSINESS_YEAR,
-      BIG_CANOPY_ID,
-      BIG_CANOPY_ID, 
-      BIG_CANOPY_CD,
+      BIG_CANOPY_ID, ---------
+      BIG_CANOPY_ID, ---------
+      BIG_CANOPY_CD, ---------
+	  BIG_CANOPY_CD,
       BIG_CANOPY_NAME,
       BIG_CANOPY_NAME, 
       BIG_CANOPY_TYPE_CD,
@@ -169,8 +190,8 @@ BEGIN
       GROW_POINT_CD, 
       GROW_POINT_NAME, 
       LEAF_VARIETY_CD, 
-      SUPPLY_AREA,
-      SUPPLY_QTY,
+      SUPPLY_AREA, ---------
+      SUPPLY_QTY,  
       ORG_CD,
       AREA_CD,
       TECHNICAN_ID,
@@ -183,7 +204,14 @@ BEGIN
       FARMER_NAME,
       LEAF_VARIETY_NAME,
       GROW_POINT_TYPE_NAME,
-      CANOPY_TYPE_NAME
+      CANOPY_TYPE_NAME,
+      POINT_BUILD_YEAR,
+      SUPPLY_DATE,------------
+      IS_COUNTRY_SUBSIDY,
+      LONGITUDE,
+      LATITUDE,
+      LAND_AREA,
+      SUB_BED_AREA
     FROM V_PT_FOR_SEED_AB_D
    WHERE BUSINESS_YEAR >= V_PT_YEAR
      AND DATA_STATE = '1'
@@ -284,4 +312,4 @@ BEGIN
  ;
   COMMIT;
 
-END;
+END
