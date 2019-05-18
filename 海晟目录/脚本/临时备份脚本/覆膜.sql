@@ -1,0 +1,127 @@
+--覆膜
+
+SELECT
+  ORG.ORG_NAME,
+  BC.TOTLE_FRM_QTY,
+  BC.COMP_FRM_QTY,
+  CASE
+  WHEN BC.COMP_FRM_QTY > 0
+       AND BC.TOTLE_FRM_QTY > 0
+    THEN CAST(ROUND(CAST(BC.COMP_FRM_QTY * 100 AS FLOAT) / BC.TOTLE_FRM_QTY, 2) AS DECIMAL(10, 2))
+  ELSE 0
+  END,
+  BC.CNTRCT_PLNT_AREA,
+  A.VELUM_AREA,
+  CASE
+  WHEN A.VELUM_AREA > 0
+       AND BC.CNTRCT_PLNT_AREA > 0
+    THEN CAST(ROUND(CAST(A.VELUM_AREA * 100 AS FLOAT) / BC.CNTRCT_PLNT_AREA, 2) AS DECIMAL(10, 2))
+  ELSE 0
+  END,
+  VELUM_T,
+  VELUM_F,
+  EFFTET_T,
+  EFFTET_F,
+  EVAL_1,
+  EVAL_2,
+  EVAL_3,
+  EVAL_4,
+  BEGIN_DATE,
+  END_DATE,
+  A.ORG_CD
+FROM
+  (
+    SELECT
+      CITC            AS ORG_CD,
+      SUM(CASE
+          WHEN VELUM_EFFTET = '1' OR VELUM_EFFTET = '2'
+            THEN VELUM_AREA
+          ELSE 0 END) AS VELUM_AREA,
+      SUM(CASE
+          WHEN VELUM_EFFTET = '1' OR VELUM_EFFTET = '2'
+            THEN VELUM_AREA
+          ELSE 0 END) AS VELUM_T,
+      SUM(CASE WHEN VELUM_EFFTET <> '1' AND VELUM_EFFTET <> '2'
+        THEN VELUM_AREA
+          ELSE 0 END) AS VELUM_F,
+      SUM(CASE
+          WHEN VELUM_EFFTET = '1'
+            THEN VELUM_AREA
+          ELSE 0 END) AS EFFTET_T,
+      SUM(CASE
+          WHEN VELUM_EFFTET = '2'
+            THEN VELUM_AREA
+          ELSE 0 END) AS EFFTET_F,
+      SUM(CASE
+          WHEN WORK_EFFECT_EVAL = '01'
+            THEN VELUM_AREA
+          ELSE 0 END) AS EVAL_1,
+      SUM(CASE
+          WHEN WORK_EFFECT_EVAL = '02'
+            THEN VELUM_AREA
+          ELSE 0 END) AS EVAL_2,
+      SUM(CASE
+          WHEN WORK_EFFECT_EVAL = '03'
+            THEN VELUM_AREA
+          ELSE 0 END) AS EVAL_3,
+      SUM(CASE
+          WHEN WORK_EFFECT_EVAL = '04'
+            THEN VELUM_AREA
+          ELSE 0 END) AS EVAL_4,
+      MIN(BEGIN_DATE) AS BEGIN_DATE,
+      MAX(END_DATE)   AS END_DATE
+    FROM
+      R_PT_VELUM_FM_D
+    WHERE
+      DATA_STATE = '1'
+      AND PROV = '52'
+      AND BEGIN_DATE >= TIMESTAMP('2018-01-01 00:00:00')
+      AND END_DATE <= TIMESTAMP('2019-05-09 00:00:00')
+      AND BUSINESS_YEAR = 2019
+    GROUP BY
+      CITC) A
+  LEFT JOIN
+  (
+    SELECT
+      B.ORG_CD,
+      COUNT(DISTINCT B.FARMER_CD) AS TOTLE_FRM_QTY,
+      SUM(B.VELUM_AREA)           AS VELUM_AREA,
+      SUM(C.CNTRCT_PLNT_AREA)     AS CNTRCT_PLNT_AREA,
+      COUNT(DISTINCT (
+        CASE
+        WHEN B.VELUM_AREA = C.CNTRCT_PLNT_AREA
+          THEN B.FARMER_CD
+        END))                     AS COMP_FRM_QTY
+    FROM
+      (
+        SELECT
+          CITC            AS ORG_CD,
+          FARMER_CD,
+          SUM(CASE
+              WHEN VELUM_EFFTET = '1' OR VELUM_EFFTET = '2'
+                THEN VELUM_AREA
+              ELSE 0 END) AS VELUM_AREA
+        FROM
+          R_PT_VELUM_FM_D
+        WHERE
+          DATA_STATE = '1'
+          AND PROV = '52'
+          AND BEGIN_DATE >= TIMESTAMP('2018-01-01 00:00:00')
+          AND END_DATE <= TIMESTAMP('2019-05-09 00:00:00')
+          AND BUSINESS_YEAR = 2019
+        GROUP BY
+          CITC, FARMER_CD
+      ) B
+      LEFT JOIN
+      (
+        SELECT
+          FARMER_CD,
+          SUM(CNTRCT_PLNT_AREA) AS CNTRCT_PLNT_AREA
+        FROM
+          R_PC_CTRT_PC_Y_Y19
+        WHERE DATA_STATE = '1'
+        GROUP BY FARMER_CD
+      ) C ON B.FARMER_CD = C.FARMER_CD
+    GROUP BY B.ORG_CD
+  ) BC ON A.ORG_CD = BC.ORG_CD
+  LEFT JOIN B_ORG ORG ON A.ORG_CD = ORG.ORG_CD
