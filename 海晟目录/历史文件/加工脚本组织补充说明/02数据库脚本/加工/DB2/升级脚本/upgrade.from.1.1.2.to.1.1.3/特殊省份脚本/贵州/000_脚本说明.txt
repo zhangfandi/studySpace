@@ -1,0 +1,5 @@
+批处理执行顺序：
+1、dcDrop.bat
+2、tsoDrop.bat
+3、tso.bat
+4、dc.bat

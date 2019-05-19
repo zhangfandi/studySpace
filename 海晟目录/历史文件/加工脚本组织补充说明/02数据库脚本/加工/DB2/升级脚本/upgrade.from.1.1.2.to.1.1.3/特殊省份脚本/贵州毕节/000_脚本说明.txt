@@ -1,0 +1,4 @@
+脚本执行顺序：
+1、将“000_引用说明.txt”中引用省局的视图(TSO)、NICKNAME(DCCELL)、过程(DCCELL)创建
+2、执行dcDrop.bat
+3、执行dc.bat

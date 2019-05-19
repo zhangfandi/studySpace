@@ -1,0 +1,135 @@
+--DROP PROCEDURE P_DC_CALL_ID_02_SC;
+CREATE PROCEDURE P_DC_CALL_ID_02_SC
+------------------------------------------------------------
+-- LINGM   2018-01-29
+------------------------------------------------------------
+BEGIN
+  DECLARE V_JOB_CODE    VARCHAR(32);
+  DECLARE V_ITEM_CODE   VARCHAR(32);
+  DECLARE V_ITEM_NAME   VARCHAR(32);
+  DECLARE V_RESULT_TYPE CHAR(1);
+  DECLARE V_RESULT_DESC VARCHAR(1024);
+  DECLARE V_TIME_BEGIN  TIMESTAMP;
+  DECLARE V_TIME_END    TIMESTAMP;
+
+  DECLARE SQLSTATE CHAR(5) DEFAULT '00000';
+  DECLARE L_SQLSTATE CHAR(5) DEFAULT '00000';
+  DECLARE SQLCODE INTEGER DEFAULT 0;
+  DECLARE L_SQLCODE INTEGER DEFAULT 0; 
+
+  DECLARE ERR_1 INTEGER DEFAULT 0; 
+  DECLARE ERR_2 INTEGER DEFAULT 0; 
+
+
+  DECLARE EXIT HANDLER FOR SQLEXCEPTION
+  BEGIN
+   VALUES (SQLSTATE, SQLCODE) INTO L_SQLSTATE, L_SQLCODE;
+   SET V_RESULT_TYPE = '0';
+   SET V_RESULT_DESC = '执行失败,'||'停止在过程：'||V_ITEM_CODE||',错误代码'|| L_SQLSTATE;
+   SET V_TIME_END    = current timestamp;
+   call P_DC_LOG(V_JOB_CODE,V_ITEM_CODE,V_ITEM_NAME,V_RESULT_TYPE,V_RESULT_DESC,V_TIME_BEGIN,V_TIME_END);
+   COMMIT;
+   IF ERR_2 = 1 AND ERR_1 = 1 THEN
+     RESIGNAL;
+   ELSE 
+     IF ERR_2 = 0 THEN
+       SET ERR_1 = 1;
+     END IF;
+   END IF;
+  END;
+
+  BEGIN
+
+   SET V_JOB_CODE    = 'P_DC_CALL_ID_02_SC';
+
+   SET V_ITEM_CODE   = 'P_R_PT_TRANSPLANT_FM_D';
+   SET V_ITEM_NAME   = '移栽普查';
+   SET V_TIME_BEGIN  = current timestamp;
+   call P_R_PT_TRANSPLANT_FM_D();
+   SET V_RESULT_TYPE = '1';
+   SET V_RESULT_DESC = '执行成功';
+   SET V_TIME_END    = current timestamp;
+   call P_DC_LOG(V_JOB_CODE,V_ITEM_CODE,V_ITEM_NAME,V_RESULT_TYPE,V_RESULT_DESC,V_TIME_BEGIN,V_TIME_END);
+   
+   SET V_ITEM_CODE   = 'P_R_PT_GROW_AB_D';
+   SET V_ITEM_NAME   = '育苗';
+   SET V_TIME_BEGIN  = current timestamp;
+   call P_R_PT_GROW_AB_D();
+   SET V_RESULT_TYPE = '1';
+   SET V_RESULT_DESC = '执行成功';
+   SET V_TIME_END    = current timestamp;
+   call P_DC_LOG(V_JOB_CODE,V_ITEM_CODE,V_ITEM_NAME,V_RESULT_TYPE,V_RESULT_DESC,V_TIME_BEGIN,V_TIME_END);
+   
+   SET V_ITEM_CODE   = 'P_R_PT_FOR_SEED_FM_Y';
+   SET V_ITEM_NAME   = '供苗';
+   SET V_TIME_BEGIN  = current timestamp;
+   call P_R_PT_FOR_SEED_FM_Y();
+   SET V_RESULT_TYPE = '1';
+   SET V_RESULT_DESC = '执行成功';
+   SET V_TIME_END    = current timestamp;
+   call P_DC_LOG(V_JOB_CODE,V_ITEM_CODE,V_ITEM_NAME,V_RESULT_TYPE,V_RESULT_DESC,V_TIME_BEGIN,V_TIME_END);
+   
+   SET V_ITEM_CODE   = 'P_PT_DT_FM_D';
+   SET V_ITEM_NAME   = '打顶抹杈';
+   SET V_TIME_BEGIN  = current timestamp;
+   call P_PT_DT_FM_D();
+   SET V_RESULT_TYPE = '1';
+   SET V_RESULT_DESC = '执行成功';
+   SET V_TIME_END    = current timestamp;
+   call P_DC_LOG(V_JOB_CODE,V_ITEM_CODE,V_ITEM_NAME,V_RESULT_TYPE,V_RESULT_DESC,V_TIME_BEGIN,V_TIME_END);
+   
+   SET V_ITEM_CODE   = 'P_PT_PLOUGH_FM_D';
+   SET V_ITEM_NAME   = '翻耕';
+   SET V_TIME_BEGIN  = current timestamp;
+   call P_PT_PLOUGH_FM_D();
+   SET V_RESULT_TYPE = '1';
+   SET V_RESULT_DESC = '执行成功';
+   SET V_TIME_END    = current timestamp;
+   call P_DC_LOG(V_JOB_CODE,V_ITEM_CODE,V_ITEM_NAME,V_RESULT_TYPE,V_RESULT_DESC,V_TIME_BEGIN,V_TIME_END);
+   
+   SET V_ITEM_CODE   = 'P_PT_PREPAR_FM_D';
+   SET V_ITEM_NAME   = '起垄';
+   SET V_TIME_BEGIN  = current timestamp;
+   call P_PT_PREPAR_FM_D();
+   SET V_RESULT_TYPE = '1';
+   SET V_RESULT_DESC = '执行成功';
+   SET V_TIME_END    = current timestamp;
+   call P_DC_LOG(V_JOB_CODE,V_ITEM_CODE,V_ITEM_NAME,V_RESULT_TYPE,V_RESULT_DESC,V_TIME_BEGIN,V_TIME_END);
+   
+   SET V_ITEM_CODE   = 'P_PT_TRANSPLANT_FM_D';
+   SET V_ITEM_NAME   = '移栽';
+   SET V_TIME_BEGIN  = current timestamp;
+   call P_PT_TRANSPLANT_FM_D();
+   SET V_RESULT_TYPE = '1';
+   SET V_RESULT_DESC = '执行成功';
+   SET V_TIME_END    = current timestamp;
+   call P_DC_LOG(V_JOB_CODE,V_ITEM_CODE,V_ITEM_NAME,V_RESULT_TYPE,V_RESULT_DESC,V_TIME_BEGIN,V_TIME_END);
+   
+   SET V_ITEM_CODE   = 'P_PT_DC_WC_RELA_D';
+   SET V_ITEM_NAME   = '常德农事督导结果加工';
+   SET V_TIME_BEGIN  = current timestamp;
+   call P_PT_DC_WC_RELA_D();
+   SET V_RESULT_TYPE = '1';
+   SET V_RESULT_DESC = '执行成功';
+   SET V_TIME_END    = current timestamp;
+   call P_DC_LOG(V_JOB_CODE,V_ITEM_CODE,V_ITEM_NAME,V_RESULT_TYPE,V_RESULT_DESC,V_TIME_BEGIN,V_TIME_END);
+   
+   SET V_ITEM_CODE   = 'P_PT_PF_FARMER_STAT';
+   SET V_ITEM_NAME   = '湖南常德职业烟农指标加工';
+   SET V_TIME_BEGIN  = current timestamp;
+   call P_PT_PF_FARMER_STAT();
+   SET V_RESULT_TYPE = '1';
+   SET V_RESULT_DESC = '执行成功';
+   SET V_TIME_END    = current timestamp;
+   call P_DC_LOG(V_JOB_CODE,V_ITEM_CODE,V_ITEM_NAME,V_RESULT_TYPE,V_RESULT_DESC,V_TIME_BEGIN,V_TIME_END);
+   
+   --
+   SET ERR_2 = 1;
+   --
+   IF ERR_1 = 1 THEN
+      SIGNAL  SQLSTATE '22375' SET MESSAGE_TEXT = V_ITEM_NAME;
+   END IF;
+   
+  END;
+END
+@

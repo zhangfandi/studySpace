@@ -1,0 +1,5 @@
+初始化DC视图、过程顺序
+1、dcDrop.bat
+2、tsoDrop.bat
+3、tso.bat
+4、dc.bat

@@ -1,0 +1,418 @@
+--DROP PROCEDURE DCCELL.P_R_PT_VELUM;
+CREATE PROCEDURE DCCELL.P_R_PT_VELUM
+    BEGIN
+        DECLARE
+            V_YEAR INTEGER;
+DECLARE
+    V_CURRENT_TIME TIMESTAMP;
+SET V_CURRENT_TIME = CURRENT TIMESTAMP;
+SELECT
+    BUSI_YEAR
+INTO
+    V_YEAR
+FROM
+    DC_PROC_BUSI_YEAR A
+WHERE
+    A.PROC_NAME = 'P_DC_CALL_ID_02_SC';
+DELETE
+FROM
+    R_PT_VELUM_FM_D
+WHERE
+    BUSINESS_YEAR>=V_YEAR;
+COMMIT;
+INSERT
+INTO
+    R_PT_VELUM_FM_D
+    (
+        VELUM_FM_D_ID,
+        FARMER_ID,
+        FARMER_CD,
+        FARMER_NAME,
+        FIELD_BLOCK_ID,
+        FIELD_BLOCK_CD,
+        FIELD_BLOCK_NAME,
+        BUSINESS_YEAR,
+        BUSINESS_DATE,
+        VELUM_AREA,
+        TECHNICIAN_ID,
+        TECHNICIAN_NAME,
+        DATA_STATE ,
+        SEND_STATE,
+        MODIFY_TIME,
+        LAST_TIME,
+        ORG_CD,
+        ORG_NAME,
+        PROV,
+        PROV_NAME,
+        CITC,
+        CITC_NAME,
+        COUC,
+        COUC_NAME,
+        STAC,
+        STAC_NAME,
+        SSTC,
+        SSTC_NAME,
+        AREA_CD,
+        AREA_NAME,
+        AREA_PROV,
+        AREA_PROV_NAME,
+        AREA_CITC,
+        AREA_CITC_NAME,
+        AREA_COUC,
+        AREA_COUC_NAME,
+        AREA_TOWN,
+        TOWN_NAME,
+        AREA_VAGE,
+        VAGE_NAME,
+        AREA_GRUP,
+        GRUP_NAME,
+        CNTY ,
+        CNTY_NAME ,
+        CNTY_UNIQUE ,
+        PROV_UNIQUE ,
+        CITC_UNIQUE ,
+        COUC_UNIQUE ,
+        STAC_UNIQUE ,
+        SSTC_UNIQUE ,
+        SLIN_UNIQUE ,
+        AREA_CNTY ,
+        AREA_CNTY_NAME
+    )
+SELECT
+    A.VELUM_FM_D_ID,
+    A.FARMER_ID,
+    A.FARMER_CD,
+    A.FARMER_NAME,
+    A.FIELD_BLOCK_ID,
+    A.FIELD_BLOCK_CD,
+    A.FIELD_BLOCK_NAME,
+    A.BUSINESS_YEAR,
+    A.BUSINESS_DATE,
+    A.VELUM_AREA,
+    C.TECHNICIAN_ID,
+    C.TECHNICIAN_NAME,
+    '1'            AS DATA_STATE ,
+    '0'            AS SEND_STATE,
+    V_CURRENT_TIME AS MODIFY_TIME,
+    V_CURRENT_TIME AS LAST_TIME,
+    D.ORG_CD,
+    D.ORG_NAME,
+    D.PROV,
+    D.PROV_NAME,
+    D.CITC,
+    D.CITC_NAME,
+    D.COUC,
+    D.COUC_NAME,
+    D.STAC,
+    D.STAC_NAME,
+    D.SSTC,
+    D.SSTC_NAME,
+    D.AREA_CD,
+    D.AREA_NAME,
+    D.AREA_PROV,
+    D.AREA_PROV_NAME,
+    D.AREA_CITC,
+    D.AREA_CITC_NAME,
+    D.AREA_COUC,
+    D.AREA_COUC_NAME,
+    D.AREA_TOWN,
+    D.TOWN_NAME,
+    D.AREA_VAGE,
+    D.VAGE_NAME,
+    D.AREA_GRUP,
+    D.GRUP_NAME,
+    D.CNTY ,
+    D.CNTY_NAME ,
+    D.CNTY_UNIQUE ,
+    D.PROV_UNIQUE ,
+    D.CITC_UNIQUE ,
+    D.COUC_UNIQUE ,
+    D.STAC_UNIQUE ,
+    D.SSTC_UNIQUE ,
+    D.SLIN_UNIQUE ,
+    D.AREA_CNTY ,
+    D.AREA_CNTY_NAME
+FROM
+    (
+        SELECT
+            MAX(A.DATA_STORE_BASE_TBL_ID) AS VELUM_FM_D_ID,
+            A.CLT_OBJ_ID                  AS FIELD_BLOCK_ID,
+            A.CLT_OBJ_CD                  AS FIELD_BLOCK_CD,
+            MAX(A.CLT_OBJ_NAME)           AS FIELD_BLOCK_NAME,
+            A.D1                          AS BUSINESS_DATE,
+            A.RELA_OBJECT_ID              AS FARMER_ID,
+            A.RELA_OBJECT_CD              AS FARMER_CD,
+            MAX(A.RELA_OBJECT_NAME)       AS FARMER_NAME,
+            A.PT_YEAR                     AS BUSINESS_YEAR,
+            SUM(COALESCE(A.N1,0))         AS VELUM_AREA
+        FROM
+            PT_DC_STAT_DATA_B A
+        WHERE
+            A.DATA_STATE='1'
+        AND A.PT_YEAR >= V_YEAR
+        AND A.BILL_NO='TJ19HB0000000006'
+        GROUP BY
+            A.CLT_OBJ_ID,
+            A.CLT_OBJ_CD,
+            A.D1,
+            A.RELA_OBJECT_ID,
+            A.RELA_OBJECT_CD,
+            A.PT_YEAR ) A
+LEFT JOIN
+    R_FRMR_TECH_REL C
+ON
+    A.FARMER_CD = C.FARMER_CD
+AND C.DATA_STATE='1'
+LEFT JOIN
+    R_FARMER D
+ON
+    A.FARMER_CD=D.FARMER_CD;
+COMMIT;
+DELETE
+FROM
+    R_PT_VELUM_DV_D
+WHERE
+    BUSINESS_YEAR>=V_YEAR;
+COMMIT;
+INSERT
+INTO
+    R_PT_VELUM_DV_D
+    (
+        VELUM_DV_D_ID,
+        SEND_STATE,
+        DATA_STATE,
+        MODIFY_TIME,
+        LAST_TIME,
+        BUSINESS_YEAR,
+        BUSINESS_DATE,
+        VELUM_AREA,
+        ORG_CD,
+        ORG_NAME,
+        PROV,
+        PROV_NAME,
+        CITC,
+        CITC_NAME,
+        COUC,
+        COUC_NAME,
+        STAC,
+        STAC_NAME,
+        SSTC,
+        SSTC_NAME,
+        AREA_CD,
+        AREA_NAME,
+        AREA_PROV,
+        AREA_PROV_NAME,
+        AREA_CITC,
+        AREA_CITC_NAME,
+        AREA_COUC,
+        AREA_COUC_NAME,
+        AREA_TOWN,
+        TOWN_NAME,
+        AREA_VAGE,
+        VAGE_NAME,
+        AREA_GRUP,
+        GRUP_NAME,
+        CNTY ,
+        CNTY_NAME ,
+        CNTY_UNIQUE ,
+        PROV_UNIQUE ,
+        CITC_UNIQUE ,
+        COUC_UNIQUE ,
+        STAC_UNIQUE ,
+        SSTC_UNIQUE ,
+        SLIN_UNIQUE ,
+        AREA_CNTY ,
+        AREA_CNTY_NAME
+    )
+SELECT
+    HEX(GENERATE_UNIQUE()) AS VELUM_DV_D_ID,
+    '0'                    AS SEND_STATE,
+    '1'                    AS DATA_STATE,
+    MAX(MODIFY_TIME)       AS MODIFY_TIME,
+    CURRENT TIMESTAMP      AS LAST_TIME,
+    BUSINESS_YEAR,
+    BUSINESS_DATE   AS BUSINESS_DATE,
+    SUM(VELUM_AREA) AS VELUM_AREA,
+    ORG_CD,
+    ORG_NAME,
+    PROV,
+    PROV_NAME,
+    CITC,
+    CITC_NAME,
+    COUC,
+    COUC_NAME,
+    STAC,
+    STAC_NAME,
+    SSTC,
+    SSTC_NAME,
+    AREA_CD,
+    AREA_NAME,
+    AREA_PROV,
+    AREA_PROV_NAME,
+    AREA_CITC,
+    AREA_CITC_NAME,
+    AREA_COUC,
+    AREA_COUC_NAME,
+    AREA_TOWN,
+    TOWN_NAME,
+    AREA_VAGE,
+    VAGE_NAME,
+    AREA_GRUP,
+    GRUP_NAME,
+    CNTY ,
+    CNTY_NAME ,
+    CNTY_UNIQUE ,
+    PROV_UNIQUE ,
+    CITC_UNIQUE ,
+    COUC_UNIQUE ,
+    STAC_UNIQUE ,
+    SSTC_UNIQUE ,
+    SLIN_UNIQUE ,
+    AREA_CNTY ,
+    AREA_CNTY_NAME
+FROM
+    R_PT_VELUM_FM_D T
+WHERE
+    T.BUSINESS_YEAR >= V_YEAR
+GROUP BY
+    T.BUSINESS_YEAR,
+    T.BUSINESS_DATE,
+    T.ORG_CD,
+    T.ORG_NAME,
+    T.PROV,
+    T.PROV_NAME,
+    T.CITC,
+    T.CITC_NAME,
+    T.COUC,
+    T.COUC_NAME,
+    T.STAC,
+    T.STAC_NAME,
+    T.SSTC,
+    T.SSTC_NAME,
+    T.AREA_CD,
+    T.AREA_NAME,
+    T.AREA_PROV,
+    T.AREA_PROV_NAME,
+    T.AREA_CITC,
+    T.AREA_CITC_NAME,
+    T.AREA_COUC,
+    T.AREA_COUC_NAME,
+    T.AREA_TOWN,
+    T.TOWN_NAME,
+    T.AREA_VAGE,
+    T.VAGE_NAME,
+    T.AREA_GRUP,
+    T.GRUP_NAME,
+    T.CNTY ,
+    T.CNTY_NAME ,
+    T.CNTY_UNIQUE ,
+    T.PROV_UNIQUE ,
+    T.CITC_UNIQUE ,
+    T.COUC_UNIQUE ,
+    T.STAC_UNIQUE ,
+    T.SSTC_UNIQUE ,
+    T.SLIN_UNIQUE ,
+    T.AREA_CNTY ,
+    T.AREA_CNTY_NAME WITH UR;
+COMMIT;
+DELETE
+FROM
+    R_PT_VELUM_CB_D
+WHERE
+    BUSINESS_YEAR>=V_YEAR;
+COMMIT;
+INSERT
+INTO
+    R_PT_VELUM_CB_D
+    (
+        VELUM_CB_D_ID,
+        SEND_STATE,
+        DATA_STATE,
+        MODIFY_TIME,
+        LAST_TIME,
+        BUSINESS_YEAR,
+        BUSINESS_DATE,
+        VELUM_AREA,
+        ORG_CD,
+        ORG_NAME,
+        PROV,
+        PROV_NAME,
+        CITC,
+        CITC_NAME,
+        COUC,
+        COUC_NAME,
+        STAC,
+        STAC_NAME,
+        SSTC,
+        SSTC_NAME,
+        CNTY ,
+        CNTY_NAME ,
+        CNTY_UNIQUE ,
+        PROV_UNIQUE ,
+        CITC_UNIQUE ,
+        COUC_UNIQUE ,
+        STAC_UNIQUE ,
+        SSTC_UNIQUE ,
+        SLIN_UNIQUE
+    )
+SELECT
+    HEX(GENERATE_UNIQUE()) AS TRANSPLANT_CB_D_ID,
+    '0',
+    '1',
+    MAX(MODIFY_TIME),
+    CURRENT TIMESTAMP,
+    BUSINESS_YEAR,
+    BUSINESS_DATE,
+    SUM(VELUM_AREA) AS VELUM_AREA,
+    ORG_CD,
+    ORG_NAME,
+    PROV,
+    PROV_NAME,
+    CITC,
+    CITC_NAME,
+    COUC,
+    COUC_NAME,
+    STAC,
+    STAC_NAME,
+    SSTC,
+    SSTC_NAME,
+    CNTY ,
+    CNTY_NAME ,
+    CNTY_UNIQUE ,
+    PROV_UNIQUE ,
+    CITC_UNIQUE ,
+    COUC_UNIQUE ,
+    STAC_UNIQUE ,
+    SSTC_UNIQUE ,
+    SLIN_UNIQUE
+FROM
+    R_PT_VELUM_DV_D T
+WHERE
+    T.BUSINESS_YEAR >= V_YEAR
+GROUP BY
+    T.BUSINESS_YEAR,
+    T.BUSINESS_DATE,
+    T.ORG_CD,
+    T.ORG_NAME,
+    T.PROV,
+    T.PROV_NAME,
+    T.CITC,
+    T.CITC_NAME,
+    T.COUC,
+    T.COUC_NAME,
+    T.STAC,
+    T.STAC_NAME,
+    T.SSTC,
+    T.SSTC_NAME,
+    T.CNTY ,
+    T.CNTY_NAME ,
+    T.CNTY_UNIQUE ,
+    T.PROV_UNIQUE ,
+    T.CITC_UNIQUE ,
+    T.COUC_UNIQUE ,
+    T.STAC_UNIQUE ,
+    T.SSTC_UNIQUE ,
+    T.SLIN_UNIQUE WITH UR;
+COMMIT;
+END
+@
