@@ -14,6 +14,14 @@ ${DM}/Report.do?name=velumDetailStat&isDebug=1&action=open&path=pt_hunan
 ${DM}/Report.do?name=smallPT&isDebug=1&action=open&path=pt_hunan
 8、小培土明细表
 ${DM}/Report.do?name=smallPTDetail&isDebug=1&action=open&path=pt_hunan
+9、植保统计表
+${DM}/Report.do?name=preventStat&isDebug=1&action=open&path=pt_hunan
+10、植保明细表
+${DM}/Report.do?name=preventDetailStat&isDebug=1&action=open&path=pt_hunan
+11、成熟采收统计表
+${DM}/Report.do?name=recoveryStat&isDebug=1&action=open&path=pt_hunan
+12、成熟采收明细表
+${DM}/Report.do?name=recoveryDetailStat&isDebug=1&action=open&path=pt_hunan
 
 
 //起垄总表 
