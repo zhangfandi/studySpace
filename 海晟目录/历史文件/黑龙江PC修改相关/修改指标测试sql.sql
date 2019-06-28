@@ -1,0 +1,21 @@
+SELECT * FROM PT_DS_BILL_SET_MAS WHERE BILL_NO ='TJ23000000000048';
+SELECT * FROM PT_AS_PUBLISH_OBJ_RELA WHERE PUBLISH_OWNER_ID='e34290b1f7774e9d9d7240e64f68c897';
+SELECT * FROM PT_DS_BILL_TBL_BODY_SET WHERE BILL_NO ='TJ23000000000001' AND DATA_STATE='1';
+
+SELECT * FROM PT_DS_BILL_TBL_BODY_SET WHERE PT_YEAR=2019 AND DATA_STATE='1' AND BILL_NO='TJ23000000000024';
+
+
+
+SELECT * FROM PT_IX_IDX where src_bill_no='STAT90580020';
+SELECT * FROM PT_IX_IDX WHERE NAME='Â¢¾à';
+
+SELECT * FROM PT_DC_STAT_DATA_B WHERE DATA_STORE_BASE_TBL_ID='cdb32584220a4b60b7d7aed2c94fff8f';
+SELECT 
+trim(replace(strip(replace(char(cast(N1 as decimal(8,2))),'0.','#'),L,'0'),'#','0.'))
+||':'||
+trim(replace(strip(replace(char(cast(N2 as decimal(8,2))),'0.','#'),L,'0'),'#','0.'))
+||':'||
+trim(replace(strip(replace(char(cast(N3 as decimal(8,2))),'0.','#'),L,'0'),'#','0.'))
+FROM PT_DC_STAT_DATA_B WHERE DATA_STORE_BASE_TBL_ID='cdb32584220a4b60b7d7aed2c94fff8f';
+
+

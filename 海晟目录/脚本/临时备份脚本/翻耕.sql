@@ -1,5 +1,3 @@
---翻耕
-
 SELECT
   ORG.ORG_NAME,
   BC.TOTLE_FRM_QTY,
@@ -90,7 +88,7 @@ FROM
       DATA_STATE = '1'
       AND PROV = '52'
       AND END_DATE >= TIMESTAMP('2018-01-01 00:00:00')
-      AND END_DATE <= TIMESTAMP('2019-05-09 00:00:00')
+      AND END_DATE <= TIMESTAMP('2019-05-25 00:00:00')
       AND BUSINESS_YEAR = 2019
     GROUP BY
       CITC) A
@@ -98,14 +96,10 @@ FROM
   (
     SELECT
       B.ORG_CD,
-      COUNT(DISTINCT B.FARMER_CD) AS TOTLE_FRM_QTY,
+      D.TOTLE_FRM_QTY,
+      COUNT(DISTINCT B.FARMER_CD) AS COMP_FRM_QTY,
       SUM(B.PLOUGH_AREA)          AS PLOUGH_AREA,
-      SUM(C.APPROVE_AREA)         AS APPROVE_AREA,
-      COUNT(DISTINCT (
-        CASE
-        WHEN B.PLOUGH_AREA = C.APPROVE_AREA
-          THEN B.FARMER_CD
-        END))                     AS COMP_FRM_QTY
+      SUM(C.APPROVE_AREA)         AS APPROVE_AREA
     FROM
       (
         SELECT
@@ -117,6 +111,8 @@ FROM
         WHERE
           DATA_STATE = '1'
           AND PROV = '52'
+          AND END_DATE >= TIMESTAMP('2018-01-01 00:00:00')
+          AND END_DATE <= TIMESTAMP('2019-05-25 00:00:00')
         GROUP BY
           CITC,
           FARMER_CD) B
@@ -134,7 +130,20 @@ FROM
           AND BIZ_YEAR = 2019
         GROUP BY
           FRM_CD) C ON B.FARMER_CD = C.FARMER_CD
+      LEFT JOIN
+      (
+        SELECT
+          CITC                      AS ORG_CD,
+          COUNT(DISTINCT FARMER_CD) AS TOTLE_FRM_QTY
+        FROM
+          R_FRMR_TECH_REL_Y19
+        WHERE
+          DATA_STATE = '1'
+          AND PROV = '52'
+        GROUP BY CITC
+      )
+      D ON B.ORG_CD = D.ORG_CD
     GROUP BY
-      B.ORG_CD) BC ON A.ORG_CD = BC.ORG_CD
+      B.ORG_CD, D.TOTLE_FRM_QTY) BC ON A.ORG_CD = BC.ORG_CD
   LEFT JOIN
-  b_org ORG ON A.ORG_CD = ORG.ORG_CD
+  b_org ORG ON A.ORG_CD = ORG.ORG_CD WITH UR
